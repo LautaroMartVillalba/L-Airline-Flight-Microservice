@@ -1,8 +1,8 @@
 package ar.com.l_airline.repositories;
 
-import ar.com.l_airline.entities.flight.AirlineName;
-import ar.com.l_airline.entities.flight.Flight;
-import ar.com.l_airline.location.City;
+import ar.com.l_airline.enums.AirlineName;
+import ar.com.l_airline.entities.Flight;
+import ar.com.l_airline.enums.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

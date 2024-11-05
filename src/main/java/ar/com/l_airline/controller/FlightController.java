@@ -1,11 +1,11 @@
-package ar.com.l_airline.controllers;
+package ar.com.l_airline.controller;
 
-import ar.com.l_airline.entities.flight.AirlineName;
-import ar.com.l_airline.entities.flight.Flight;
-import ar.com.l_airline.entities.flight.FlightDTO;
+import ar.com.l_airline.enums.AirlineName;
+import ar.com.l_airline.entities.Flight;
+import ar.com.l_airline.entities.FlightDTO;
 import ar.com.l_airline.exceptionHandler.MissingDataException;
 import ar.com.l_airline.services.FlightService;
-import ar.com.l_airline.location.City;
+import ar.com.l_airline.enums.City;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

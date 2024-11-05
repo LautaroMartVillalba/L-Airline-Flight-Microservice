@@ -1,6 +1,7 @@
-package ar.com.l_airline.entities.flight;
+package ar.com.l_airline.entities;
 
-import ar.com.l_airline.location.City;
+import ar.com.l_airline.enums.AirlineName;
+import ar.com.l_airline.enums.City;
 import jakarta.persistence.*;
 import lombok.*;
 

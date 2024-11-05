@@ -1,4 +1,4 @@
-package ar.com.l_airline.location;
+package ar.com.l_airline.enums;
 
 /**
  * Hypotheticals examples places.

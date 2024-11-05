@@ -1,11 +1,11 @@
 package ar.com.l_airline.services;
 
-import ar.com.l_airline.entities.flight.AirlineName;
-import ar.com.l_airline.entities.flight.Flight;
-import ar.com.l_airline.entities.flight.FlightDTO;
+import ar.com.l_airline.enums.AirlineName;
+import ar.com.l_airline.entities.Flight;
+import ar.com.l_airline.entities.FlightDTO;
 import ar.com.l_airline.exceptionHandler.MissingDataException;
 import ar.com.l_airline.repositories.FlightRepository;
-import ar.com.l_airline.location.City;
+import ar.com.l_airline.enums.City;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
