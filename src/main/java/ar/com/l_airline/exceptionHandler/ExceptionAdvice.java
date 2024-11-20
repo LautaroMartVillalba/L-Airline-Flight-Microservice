@@ -1,5 +1,8 @@
 package ar.com.l_airline.exceptionHandler;
 
+import ar.com.l_airline.exceptionHandler.custom_exceptions.ExistingObjectException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
