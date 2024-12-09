@@ -4,14 +4,13 @@ import ar.com.l_airline.domain.enums.AirlineName;
 import ar.com.l_airline.domain.entities.Flight;
 import ar.com.l_airline.domain.dto.FlightDTO;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import ar.com.l_airline.repositories.FlightRepository;
 import ar.com.l_airline.domain.enums.City;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FlightService {
@@ -40,22 +39,23 @@ public class FlightService {
      * @param id Identification number.
      * @return Optional object if any matching record exists. Empty Optional if not.
      */
-    public Optional<Flight> findFlightById(Long id){
+    public Flight findFlightById(Long id){
         if (id == null){
-            return Optional.empty();
+            throw new MissingDataException();
         }
-        return repository.findById(id);
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
      * Persist a new record in the DataBase.
+     *
      * @param dto Record to insert.
-     * @return Null value if can't persist.
      */
-    public Flight createFlight(FlightDTO dto) throws MissingDataException {
+    public void createFlight(FlightDTO dto) throws MissingDataException {
         if (!validateFlight(dto)){
             throw new MissingDataException();
         }
+
         Flight flight = Flight.builder().airLine(dto.getAirLine())
                                         .origin(dto.getOrigin())
                                         .destiny(dto.getDestiny())
@@ -64,7 +64,6 @@ public class FlightService {
                                         .layover(dto.getLayover()).build();
 
         repository.save(flight);
-        return flight;
     }
 
     /**
@@ -73,12 +72,13 @@ public class FlightService {
      * @return True if it can find and delete the Flight register. False if it can't find one.
      */
     public boolean deleteFlight(Long id){
-        Optional<Flight> flightInDB = this.findFlightById(id);
-
-        if (flightInDB.isEmpty()){
-            return false;
+        if (id == null){
+            throw new MissingDataException();
         }
-        repository.deleteById(flightInDB.get().getId());
+
+        Flight flightInDB = this.findFlightById(id);
+
+        repository.deleteById(flightInDB.getId());
         return true;
     }
 
@@ -89,9 +89,16 @@ public class FlightService {
      */
     public List<Flight> findByAirLine(AirlineName airline){
         if (airline.name().isBlank()){
-            return new ArrayList<>();
+            throw new MissingDataException();
         }
-        return repository.findByAirLine(airline);
+
+        List<Flight> result = repository.findByAirLine(airline);
+
+        if (result.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 
     /**
@@ -101,9 +108,16 @@ public class FlightService {
      */
     public List<Flight> findByOrigin(City origin){
         if (origin.name().isBlank()){
-            return new ArrayList<>();
+            throw new MissingDataException();
         }
-        return repository.findByOrigin(origin);
+
+        List<Flight> result = repository.findByOrigin(origin);
+
+        if (result.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 
     /**
@@ -113,9 +127,16 @@ public class FlightService {
      */
     public List<Flight> findByDestiny(City destiny){
         if (destiny.name().isBlank()){
-            return new ArrayList<>();
+            throw new MissingDataException();
         }
-        return repository.findByDestiny(destiny);
+
+        List<Flight> result = repository.findByDestiny(destiny);
+
+        if (result.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 
     //TODO overload the method with less records
@@ -131,9 +152,16 @@ public class FlightService {
     public List<Flight> findByFlightSchedule (int year, int month, int day, int hour, int minutes){
         LocalDateTime schedule = LocalDateTime.of(year, month,day, hour, minutes);
         if (schedule.isBefore(LocalDateTime.now())){
-            return null;
+            throw new  NotFoundException();
         }
-        return repository.findByFlightSchedule(schedule);
+
+        List<Flight> result = repository.findByFlightSchedule(schedule);
+
+        if (result.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 
     /**
@@ -144,9 +172,16 @@ public class FlightService {
      */
     public List<Flight> findByPriceBetween (double min, double max){
         if (min < 0 || max < min){
-            return null;
+            throw new MissingDataException();
         }
-        return repository.findByPriceBetween(min, max);
+
+        List<Flight> result = repository.findByPriceBetween(min, max);
+
+        if (result.isEmpty()){
+            throw new NotFoundException();
+        }
+
+        return result;
     }
 
     /**
@@ -156,7 +191,7 @@ public class FlightService {
      * @return Flight changes info.
      */
     public Flight updateFlight (Long id, FlightDTO dto) {
-        Flight findFlight = this.findFlightById(id).orElseThrow(() -> new RuntimeException("Flight not found."));
+        Flight findFlight = this.findFlightById(id);
 
         if (dto.getAirLine() != null){
             findFlight.setAirLine(dto.getAirLine());
