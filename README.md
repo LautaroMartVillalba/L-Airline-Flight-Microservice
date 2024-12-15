@@ -1,5 +1,11 @@
-# L-Airline API Rest Project
+# L-Airline API Rest Project: Flight Microservice.
 
-### In this project I will use FlyWay (to manage DataBase versions), Spring Framework (JPA for persistence; Web (to manage Http Methods); Security (to manage and custom authenticaton and authorization); Email(to send messages or warning to users)); Jedis (to manage cache data).
+This microservice management the Flight module: persistence and data retrieve.
 
-Will be my first time using Jedis.
+![Flight-Diagram.png](images/Flight-Diagram.png)
+
+## Flight
+Have the following data: id, airlineName, origin, destiny, flightSchedule, layover, price.
+
+## Exception Handling
+Create custom exceptions and handle all exceptions than the project can throw (or I know that can throw), and use the ResponseEntity interface to return a friendly, understandable and explicit message.
