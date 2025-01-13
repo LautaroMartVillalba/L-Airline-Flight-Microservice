@@ -3,5 +3,5 @@ WORKDIR /cont
 COPY ./pom.xml /cont
 ADD ./target/L-Airline-0.0.1-SNAPSHOT.jar /flightms.jar
 COPY ./src /cont/src
-EXPOSE 9001
+EXPOSE 9003
 ENTRYPOINT ["java", "-jar", "/flightms.jar"]
