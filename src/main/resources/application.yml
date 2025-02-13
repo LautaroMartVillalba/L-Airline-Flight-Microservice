@@ -1,14 +1,13 @@
 spring:
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: 8462519573
   application:
     name: microservice-flight
-  datasource:
-    url: jdbc:postgresql://database:5432/airline
-    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
   cloud:
