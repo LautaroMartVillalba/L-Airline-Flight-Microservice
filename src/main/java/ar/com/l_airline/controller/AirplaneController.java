@@ -61,4 +61,9 @@ public class AirplaneController {
     public ResponseEntity<AirplaneDTO> updateAirplane(@RequestBody AirplaneDTO dto, @RequestParam UUID uuid){
         return ResponseEntity.ok(service.updateAirplane(dto, uuid));
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteAirplane(@RequestParam UUID id){
+        return ResponseEntity.ok().body("Airplane deleted!");
+    }
 }
