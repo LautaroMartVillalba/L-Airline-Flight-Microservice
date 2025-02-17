@@ -102,20 +102,18 @@ public class AirportService {
 
     @Transactional
     public Airport updateAirport(AirportDTO dto, UUID id){
-        this.validateAirport(dto);
-
         Airport result = this.findById(id);
 
-        if (!dto.getName().isEmpty()){
+        if (!(dto.getName() == null)){
             result.setName(dto.getName());
         }
-        if (!dto.getLatitude().isEmpty()){
+        if (!(dto.getLatitude() == null)){
             result.setLatitude(dto.getLatitude());
         }
-        if (!dto.getLongitude().isEmpty()){
+        if (!(dto.getLongitude() == null)){
             result.setLongitude(dto.getLongitude());
         }
-        if (!dto.getCity().name().isEmpty()){
+        if (!(dto.getCity() == null)){
             result.setCity(dto.getCity());
         }
 

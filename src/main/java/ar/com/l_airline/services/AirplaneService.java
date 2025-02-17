@@ -121,10 +121,10 @@ public class AirplaneService {
     public AirplaneDTO updateAirplane(AirplaneDTO dto, UUID id) {
         Airplane result = this.findById(id);
 
-        if (!dto.getName().name().isEmpty()) {
+        if (!(dto.getName() == null)) {
             result.setName(dto.getName());
         }
-        if (!dto.getAirlineName().name().isEmpty()) {
+        if (!(dto.getAirlineName() == null)) {
             result.setAirlineName(dto.getAirlineName());
         }
         if (dto.getCapacity()>50) {
