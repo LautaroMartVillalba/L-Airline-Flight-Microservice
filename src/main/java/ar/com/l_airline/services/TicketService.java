@@ -1,6 +1,5 @@
 package ar.com.l_airline.services;
 
-import ar.com.l_airline.domain.City;
 import ar.com.l_airline.domain.airplane.Airplane;
 import ar.com.l_airline.domain.airport.Airport;
 import ar.com.l_airline.domain.ticket.Ticket;
@@ -11,7 +10,6 @@ import ar.com.l_airline.repositories.TicketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +41,6 @@ public class TicketService {
         if (dto.getSeat() < 0){
             throw new RuntimeException("Invalid seat numer exception");
         }
-        if (dto.getPrice()<1){
-            throw new RuntimeException("Invalid price exception");
-        }
         if (dto.getSchedule().isBefore(LocalDateTime.now())){
             throw new RuntimeException("Invalid flight schedule exception");
         }
@@ -73,7 +68,7 @@ public class TicketService {
                 .origin(dto.getOrigin())
                 .destiny(dto.getDestiny())
                 .seat(dto.getSeat())
-                .price(dto.getPrice())
+                .price(PriceGenerator.calc(origin.getLatitude(), origin.getLongitude(), destiny.getLatitude(), destiny.getLongitude()))
                 .schedule(dto.getSchedule())
                 .airplane(airplane)
                 .airplaneID(dto.getAirplaneID())
