@@ -28,6 +28,12 @@ public class TicketService {
         this.airplaneServ = airplaneServ;
     }
 
+    /**
+     * Validates the ticket details.
+     *
+     * @param dto the ticket data transfer object (DTO) containing ticket details
+     * @throws RuntimeException if any validation fails
+     */
     void ticketValidation(TicketDTO dto){
         if (dto.getAirlineName().name().isEmpty()){
             throw new RuntimeException("Empty airlinename exception");
@@ -55,6 +61,12 @@ public class TicketService {
         }
     }
 
+    /**
+     * Creates a new ticket.
+     *
+     * @param dto the ticket DTO containing ticket details
+     * @return the created ticket DTO
+     */
     @Transactional
     public TicketDTO create(TicketDTO dto) {
         this.ticketValidation(dto);
@@ -92,6 +104,14 @@ public class TicketService {
                 .destinyAirportID(dto.getDestinyAirportID()).build();
     }
 
+    /**
+     * Finds a ticket by its ID.
+     *
+     * @param id the ticket ID
+     * @return the found ticket
+     * @throws MissingDataException if the ID is null
+     * @throws NotFoundException if the ticket is not found
+     */
     public Ticket findById(UUID id){
         if (id == null){
             throw new MissingDataException();
@@ -100,7 +120,14 @@ public class TicketService {
         return ticketServ.findById(id).orElseThrow(NotFoundException::new);
     }
 
-
+    /**
+     * Finds a ticket by its ID and returns it as a DTO.
+     *
+     * @param id the ticket ID
+     * @return the ticket DTO
+     * @throws MissingDataException if the ID is null
+     * @throws NotFoundException if the ticket is not found
+     */
     public TicketDTO findByIdResponse(UUID id){
         if (id == null){
             throw new MissingDataException();
@@ -119,6 +146,14 @@ public class TicketService {
                 .destinyAirportID(result.getDestinyAirportID()).build();
     }
 
+    /**
+     * Finds tickets by origin city containing the specified string.
+     *
+     * @param city the string to search for in the origin city
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided city string is empty
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByOriginContaining(String city) {
         if (city.isEmpty()){
             throw new MissingDataException();
@@ -148,6 +183,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets by destination city containing the specified string.
+     *
+     * @param city the string to search for in the destination city
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided city string is empty
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByDestinyContaining(String city) {
         if (city.isEmpty()){
             throw new MissingDataException();
@@ -176,6 +219,15 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets with prices between the specified minimum and maximum values.
+     *
+     * @param min the minimum price
+     * @param max the maximum price
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if either min or max is negative
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByPriceBetween(double min, double max) {
         if (min < 0 || max < 0) {
             throw new MissingDataException();
@@ -204,6 +256,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets with schedules between the specified start and end dates.
+     *
+     * @param from the start date in "yyyyMMdd" format
+     * @param to the end date in "yyyyMMdd" format
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByScheduleBetween(String from, String to) {
 
         int fromYear = Integer.parseInt(from.substring(0, 4));
@@ -239,6 +299,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets by airline name containing the specified string.
+     *
+     * @param airline the string to search for in the airline name
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided airline string is empty
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByAirlineNameContaining(String airline) {
         if (airline.isEmpty()){
             throw new MissingDataException();
@@ -267,6 +335,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets by airplane ID.
+     *
+     * @param airplaneID the UUID of the airplane
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided airplane ID is null
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByAirplane(UUID airplaneID) {
         if (airplaneID == null){
             throw new MissingDataException();
@@ -295,6 +371,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Finds tickets by origin airport ID.
+     *
+     * @param id the UUID of the origin airport
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided airport ID is null or empty
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByOriginAirport(UUID id) {
         if (id.toString().isEmpty() || id == null){
             throw new MissingDataException();
@@ -322,7 +406,15 @@ public class TicketService {
         });
         return response;
     }
-
+   /**
+     * Finds a ticket by airplane ID and seat number.
+     *
+     * @param airplaneId the UUID of the airplane
+     * @param seat the seat number
+     * @return the found TicketDTO object
+     * @throws MissingDataException if the provided airplane ID is null or the seat number is negative
+     * @throws NotFoundException if no ticket is found matching the criteria
+     */
     public TicketDTO findByAirplaneAndSeat(UUID airplaneId, int seat){
         if (airplaneId == null || seat < 0){
             throw new MissingDataException();
@@ -341,6 +433,14 @@ public class TicketService {
                 .destinyAirportID(result.getDestinyAirportID()).build();
     }
 
+    /**
+     * Finds tickets by destination airport ID.
+     *
+     * @param id the UUID of the destination airport
+     * @return a list of TicketDTO objects matching the search criteria
+     * @throws MissingDataException if the provided airport ID is null or empty
+     * @throws NotFoundException if no tickets are found matching the criteria
+     */
     public List<TicketDTO> findByDestinyAirport(UUID id) {
         if (id.toString().isEmpty() || id == null){
             throw new MissingDataException();
@@ -369,6 +469,14 @@ public class TicketService {
         return response;
     }
 
+    /**
+     * Updates an existing ticket with the provided TicketDTO object.
+     *
+     * @param dto the TicketDTO object containing updated ticket details
+     * @param id the UUID of the ticket to update
+     * @return the updated TicketDTO object
+     * @throws MissingDataException if the provided ID is null
+     */
     @Transactional
     public TicketDTO update(TicketDTO dto, UUID id) {
         if (id == null) {
@@ -425,6 +533,12 @@ public class TicketService {
                 .destinyAirportID(ticket.getDestinyAirportID()).build();
     }
 
+    /**
+     * Deletes a ticket by its ID.
+     *
+     * @param id the ticket ID
+     * @throws NotFoundException if the ticket does not exist
+     */
     @Transactional
     public void delete(UUID id) {
         this.findById(id);

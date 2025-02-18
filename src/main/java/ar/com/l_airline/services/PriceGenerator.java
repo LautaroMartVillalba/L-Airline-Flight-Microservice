@@ -2,6 +2,17 @@ package ar.com.l_airline.services;
 
 public class PriceGenerator {
 
+    /**
+     * Calculates the flight price based on the geographical coordinates of the origin and destination.
+     * The coordinates are expected to be in a specific format (e.g., "DDDMMSSX" where DDD is degrees,
+     * MM is minutes, SS is seconds, and X is the direction (N, S, E, O)).
+     *
+     * @param originLatitude the latitude of the origin airport in the format "DDDMMSSX"
+     * @param originLongitude the longitude of the origin airport in the format "DDDMMSSX"
+     * @param destinyLatitude the latitude of the destination airport in the format "DDDMMSSX"
+     * @param destinyLongitude the longitude of the destination airport in the format "DDDMMSSX"
+     * @return the calculated flight price based on the distance between the origin and destination
+     */
     public static double calc(String originLatitude, String originLongitude, String destinyLatitude, String destinyLongitude){
         int earthRadio = 6371;
         //Parse to int the origin latitude data
@@ -25,10 +36,10 @@ public class PriceGenerator {
         double destinyLongitudeToSeconds = Integer.parseInt(destinyLongitude.substring(7,8));
 
         //Parse to grades latitude and longitude received data
-        double originLatitudeGrades = originLatitudeToGrades + (double) originLatitudeToMinutes / 60 + (double) originLatitudeToSeconds / (60*60);
-        double originLongitudeGrades = originLongitudeToGrades + (double) originLongitudeToMinutes / 60 + (double) originLongitudeToSeconds / (60*60);
-        double destinyLatitudeGrades = destinyLatitudeToGrades + (double) destinyLatitudeToMinutes / 60 + (double) destinyLatitudeToSeconds / (60*60);
-        double destinyLongitudeGrades = destinyLongitudeToGrades + (double) destinyLongitudeToMinutes / 60 + (double) destinyLongitudeToSeconds / (60*60);
+        double originLatitudeGrades = originLatitudeToGrades + originLatitudeToMinutes / 60 + originLatitudeToSeconds / (60*60);
+        double originLongitudeGrades = originLongitudeToGrades + originLongitudeToMinutes / 60 + originLongitudeToSeconds / (60*60);
+        double destinyLatitudeGrades = destinyLatitudeToGrades + destinyLatitudeToMinutes / 60 + destinyLatitudeToSeconds / (60*60);
+        double destinyLongitudeGrades = destinyLongitudeToGrades + destinyLongitudeToMinutes / 60 + destinyLongitudeToSeconds / (60*60);
 
         //If any coordinate comes from South or West; set negative value
         if (originLatitude.endsWith("S")){

@@ -21,6 +21,14 @@ public class AirportService {
         this.repository = repository;
     }
 
+    /**
+     * Validates the provided AirportDTO object.
+     * Throws a RuntimeException if any of the required fields are invalid or empty.
+     *
+     * @param dto the AirportDTO object to validate
+     * @return true if the validation is successful
+     * @throws RuntimeException if any validation check fails
+     */
     boolean validateAirport(AirportDTO dto){
         if (dto.getName().isEmpty()){
             throw new RuntimeException("Invalid name exception");
@@ -37,6 +45,14 @@ public class AirportService {
         return true;
     }
 
+    /**
+     * Creates a new airport based on the provided AirportDTO object.
+     * Validates the DTO before creating the airport.
+     *
+     * @param dto the AirportDTO object containing airport details
+     * @return the created Airport object
+     * @throws ExistingObjectException if an airport with the same latitude and longitude already exists
+     */
     @Transactional
     public Airport createAirport (AirportDTO dto){
         this.validateAirport(dto);
@@ -57,6 +73,14 @@ public class AirportService {
         return  airport;
     }
 
+    /**
+     * Finds an airport by its ID.
+     *
+     * @param id the UUID of the airport to find
+     * @return the found Airport object
+     * @throws MissingDataException if the provided ID is null
+     * @throws NotFoundException if no airport is found with the provided ID
+     */
     public Airport findById(UUID id){
         if (id == null){
             throw new MissingDataException();
@@ -65,6 +89,14 @@ public class AirportService {
         return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Finds airports by name containing the specified string.
+     *
+     * @param name the string to search for in the airport name
+     * @return a list of Airport objects matching the search criteria
+     * @throws MissingDataException if the provided name string is empty
+     * @throws NotFoundException if no airports are found matching the criteria
+     */
     public List<Airport> findByName(String name){
         if (name.isEmpty()){
             throw new MissingDataException();
@@ -79,6 +111,15 @@ public class AirportService {
         return result;
     }
 
+    /**
+     * Finds an airport by its latitude and longitude.
+     *
+     * @param latitude the latitude of the airport
+     * @param longitude the longitude of the airport
+     * @return the found Airport object
+     * @throws MissingDataException if the provided latitude or longitude is empty
+     * @throws NotFoundException if no airport is found with the provided latitude and longitude
+     */
     public Airport findByLatitudeAndLongitude(String latitude, String longitude){
         if (latitude.isEmpty() || longitude.isEmpty()){
             throw new MissingDataException();
@@ -87,6 +128,14 @@ public class AirportService {
         return repository.findByLatitudeAndLongitude(latitude, longitude).orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Finds airports by city containing the specified string.
+     *
+     * @param city the string to search for in the city name
+     * @return a list of Airport objects matching the search criteria
+     * @throws MissingDataException if the provided city string is empty
+     * @throws NotFoundException if no airports are found matching the criteria
+     */
     public List<Airport> findByCity(String city){
         if (city.isEmpty()){
             throw new MissingDataException();
@@ -100,6 +149,14 @@ public class AirportService {
         return result;
     }
 
+    /**
+     * Updates an existing airport with the provided AirportDTO object.
+     *
+     * @param dto the AirportDTO object containing updated airport details
+     * @param id the UUID of the airport to update
+     * @return the updated Airport object
+     * @throws MissingDataException if the provided ID is null
+     */
     @Transactional
     public Airport updateAirport(AirportDTO dto, UUID id){
         Airport result = this.findById(id);
@@ -121,6 +178,12 @@ public class AirportService {
         return result;
     }
 
+    /**
+     * Deletes an airport by its ID.
+     *
+     * @param id the UUID of the airport to delete
+     * @throws MissingDataException if the provided ID is null
+     */
     @Transactional
     public void deleteAirport(UUID id){
         if (id==null){
