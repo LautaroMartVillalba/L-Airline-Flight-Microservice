@@ -1,17 +1,17 @@
 package ar.com.l_airline.repositories;
 
-import ar.com.l_airline.domain.City;
 import ar.com.l_airline.domain.ticket.Ticket;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@EnableNeo4jRepositories
 public interface TicketRepository extends Neo4jRepository<Ticket, UUID> {
 
     List<Ticket> findByOriginContaining(String city);

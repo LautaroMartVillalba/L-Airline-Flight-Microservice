@@ -4,6 +4,7 @@ import ar.com.l_airline.domain.airplane.Airplane;
 import ar.com.l_airline.domain.airport.Airport;
 import ar.com.l_airline.domain.ticket.Ticket;
 import ar.com.l_airline.domain.ticket.TicketDTO;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.ExistingObjectException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import ar.com.l_airline.repositories.TicketRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -75,6 +77,14 @@ public class TicketService {
         Airport origin = airportServ.findById(dto.getOriginAirportID());
         Airport destiny = airportServ.findById(dto.getDestinyAirportID());
 
+        List<Ticket> ticketInDB = ticketServ.findByScheduleBetween(dto.getSchedule(), dto.getSchedule());
+
+        ticketInDB.forEach(ticket -> {
+            if (ticket.getAirplaneID().equals(dto.getAirplaneID()) && ticket.getSchedule().equals(dto.getSchedule()) && ticket.getSeat() == dto.getSeat()){
+                throw new ExistingObjectException();
+            }
+        });
+
         Ticket ticket  = Ticket.builder()
                 .airlineName(dto.getAirlineName())
                 .origin(dto.getOrigin())
@@ -92,7 +102,6 @@ public class TicketService {
         ticketServ.save(ticket);
 
         return TicketDTO.builder()
-                .id(ticket.getId())
                 .airlineName(dto.getAirlineName())
                 .origin(dto.getOrigin())
                 .destiny(dto.getDestiny())
@@ -497,7 +506,7 @@ public class TicketService {
         if (!(dto.getPrice()<1)){
             ticket.setPrice(dto.getPrice());
         }
-        if (dto.getSchedule().isAfter(LocalDateTime.now())){
+        if (dto.getSchedule() != null && !dto.getSchedule().isAfter(LocalDateTime.now())){
             ticket.setSchedule(dto.getSchedule());
         }
         if (!(dto.getSeat()<0)){

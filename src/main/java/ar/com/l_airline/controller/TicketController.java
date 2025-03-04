@@ -1,18 +1,14 @@
 package ar.com.l_airline.controller;
 
-import ar.com.l_airline.domain.City;
-import ar.com.l_airline.domain.ticket.Ticket;
 import ar.com.l_airline.domain.ticket.TicketDTO;
 import ar.com.l_airline.services.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/ticket")
 public class TicketController {
 
@@ -34,6 +30,9 @@ public class TicketController {
 
     @GetMapping("/byOrigin")
     public ResponseEntity<List<TicketDTO>> findByOrigin(@RequestParam String origin){
+        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
+        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
+        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
         return ResponseEntity.ok(service.findByOriginContaining(origin));
     }
 
