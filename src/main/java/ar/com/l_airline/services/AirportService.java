@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -57,11 +58,11 @@ public class AirportService {
     public Airport createAirport (AirportDTO dto){
         this.validateAirport(dto);
 
-        repository.findByName(dto.getName()).forEach(airport -> {
-            if (dto.getLatitude() == airport.getLatitude() && dto.getLongitude() == airport.getLongitude()){
-                throw new ExistingObjectException();
-            }
-        });
+        Optional<Airport> airportInDB = repository.findByLatitudeAndLongitude(dto.getLatitude(), dto.getLongitude());
+
+        if (airportInDB.isPresent()){
+            throw new ExistingObjectException();
+        }
 
         Airport airport = Airport.builder()
                                  .name(dto.getName())
@@ -102,7 +103,7 @@ public class AirportService {
             throw new MissingDataException();
         }
 
-        List<Airport> result = repository.findByName(name);
+        List<Airport> result = repository.findByNameContaining(name);
 
         if (result.isEmpty()){
             throw new NotFoundException();

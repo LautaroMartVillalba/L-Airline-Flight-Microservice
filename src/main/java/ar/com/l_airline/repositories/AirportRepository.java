@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface AirportRepository extends Neo4jRepository<Airport, UUID> {
 
-    List<Airport> findByName(String name);
+    List<Airport> findByNameContaining(String name);
     Optional<Airport> findByLatitudeAndLongitude(String latitude, String longitude);
     List<Airport> findByCityContaining(String city);
 
