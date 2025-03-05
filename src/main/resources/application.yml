@@ -1,6 +1,7 @@
 spring:
   neo4j:
-    uri: bolt://localhost:7687
+#    uri: bolt://localhost:7687
+    uri: bolt://neo4j:7687
     authentication:
       username: neo4j
       password: 8462519573
