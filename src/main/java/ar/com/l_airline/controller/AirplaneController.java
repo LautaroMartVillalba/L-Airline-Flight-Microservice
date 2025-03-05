@@ -58,8 +58,8 @@ public class AirplaneController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<AirplaneDTO> updateAirplane(@RequestBody AirplaneDTO dto, @RequestParam UUID uuid){
-        return ResponseEntity.ok(service.updateAirplane(dto, uuid));
+    public ResponseEntity<AirplaneDTO> updateAirplane(@RequestBody AirplaneDTO dto, @RequestParam UUID id){
+        return ResponseEntity.ok(service.updateAirplane(dto, id));
     }
 
     @DeleteMapping("/delete")

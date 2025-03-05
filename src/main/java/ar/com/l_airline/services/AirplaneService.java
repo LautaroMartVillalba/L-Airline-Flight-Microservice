@@ -34,7 +34,7 @@ public class AirplaneService {
         if (dto.getName().name().isEmpty()) {
             throw new RuntimeException("Empty name exception");
         }
-        if (dto.getAirlineName().name().isEmpty()) {
+        if (dto.getAirlineName() == null) {
             throw new RuntimeException("Empty AirlineName exception");
         }
         if (dto.getCapacity() < 70) {
@@ -131,7 +131,7 @@ public class AirplaneService {
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByCapacity(int min, int max) {
-        if (min < 30 || max < 800) {
+        if (min < 30 || max > 800) {
             throw new RuntimeException("Check passengers number");
         }
 
@@ -172,7 +172,7 @@ public class AirplaneService {
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByMaxDistance(int min, int max) {
-        if (min < 50 || max > 7000) {
+        if (min < 50 || max > 10000) {
             throw new RuntimeException("Check the distance");
         }
 
