@@ -47,12 +47,12 @@ public static double calc(String originLatitude, String originLongitude, String 
     int earthRadio = 6371;
     //Parse to int from a String the origin latitude data
     //...
-    //Parse to int the origin longitude data
+    //Parse to int from a String the origin longitude data
     //...
     
-    //Parse to int the destiny latitude data
+    //Parse to int from a String the destiny latitude data
     //...
-    //Parse to int the destiny longitude data
+    //Parse to int from a String the destiny longitude data
     //...
 
     //Parse to grades latitude and longitude received data
