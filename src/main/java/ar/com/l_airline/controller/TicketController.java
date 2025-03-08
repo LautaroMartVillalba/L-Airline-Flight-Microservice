@@ -30,9 +30,6 @@ public class TicketController {
 
     @GetMapping("/byOrigin")
     public ResponseEntity<List<TicketDTO>> findByOrigin(@RequestParam String origin){
-        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
-        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
-        System.out.println("ESTO ES UNA PRUEBA A VER QUE MIERDA PASA\n");
         return ResponseEntity.ok(service.findByOriginContaining(origin));
     }
 
