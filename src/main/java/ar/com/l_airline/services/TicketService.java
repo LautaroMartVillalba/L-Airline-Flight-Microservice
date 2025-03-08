@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,32 +33,32 @@ public class TicketService {
      * Validates the ticket details.
      *
      * @param dto the ticket data transfer object (DTO) containing ticket details
-     * @throws RuntimeException if any validation fails
+     * @throws MissingDataException if any validation fails
      */
     void ticketValidation(TicketDTO dto){
-        if (dto.getAirlineName().name().isEmpty()){
-            throw new RuntimeException("Empty airlinename exception");
+        if (dto.getAirlineName() == null){
+            throw new MissingDataException("Invalid Airline name.");
         }
-        if(dto.getDestiny().name().isEmpty()){
-            throw new RuntimeException("Invalid destiny city exception");
+        if(dto.getDestiny() == null){
+            throw new MissingDataException("Invalid destiny city.");
         }
-        if (dto.getOrigin().name().isEmpty()){
-            throw new RuntimeException("Invalid origin city exception");
+        if (dto.getOrigin() == null){
+            throw new MissingDataException("Invalid origin city.");
         }
-        if (dto.getSeat() < 0){
-            throw new RuntimeException("Invalid seat numer exception");
+        if (dto.getSeat() <= 0){
+            throw new MissingDataException("Invalid seat number.");
         }
-        if (dto.getSchedule().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Invalid flight schedule exception");
+        if (dto.getSchedule() == null || dto.getSchedule().isBefore(LocalDateTime.now())){
+            throw new MissingDataException("Invalid flight schedule.");
         }
-        if (dto.getDestinyAirportID().toString().isEmpty()){
-            throw new RuntimeException("Invalid destiny airport exception");
+        if (dto.getDestinyAirportID() == null){
+            throw new MissingDataException("Invalid airport id airport.");
         }
-        if (dto.getOriginAirportID().toString().isEmpty()){
-            throw new RuntimeException("Invalid origin airport exception");
+        if (dto.getOriginAirportID() == null){
+            throw new MissingDataException("Invalid origin id airport.");
         }
-        if (dto.getAirplaneID().toString().isEmpty()){
-            throw new RuntimeException("Invalid airplane");
+        if (dto.getAirplaneID() == null){
+            throw new MissingDataException("Invalid id airplane.");
         }
     }
 
@@ -123,7 +122,7 @@ public class TicketService {
      */
     public Ticket findById(UUID id){
         if (id == null){
-            throw new MissingDataException();
+            throw new MissingDataException("Empty ID.");
         }
 
         return ticketServ.findById(id).orElseThrow(NotFoundException::new);
@@ -138,8 +137,8 @@ public class TicketService {
      * @throws NotFoundException if the ticket is not found
      */
     public TicketDTO findByIdResponse(UUID id){
-        if (id == null){
-            throw new MissingDataException();
+        if (id == null || id.toString().isEmpty()){
+            throw new MissingDataException("Empty ID.");
         }
 
         Ticket result = ticketServ.findById(id).orElseThrow(NotFoundException::new);
@@ -165,7 +164,7 @@ public class TicketService {
      */
     public List<TicketDTO> findByOriginContaining(String city) {
         if (city.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No city name received.");
         }
 
         List<TicketDTO> response = new ArrayList<>();
@@ -202,7 +201,7 @@ public class TicketService {
      */
     public List<TicketDTO> findByDestinyContaining(String city) {
         if (city.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No city name received.");
         }
         List<TicketDTO> response = new ArrayList<>();
 
@@ -239,7 +238,7 @@ public class TicketService {
      */
     public List<TicketDTO> findByPriceBetween(double min, double max) {
         if (min < 0 || max < 0) {
-            throw new MissingDataException();
+            throw new MissingDataException("No prices received.");
         }
         List<TicketDTO> response = new ArrayList<>();
         List<Ticket> result = ticketServ.findByPriceBetween(min, max);
@@ -318,7 +317,7 @@ public class TicketService {
      */
     public List<TicketDTO> findByAirlineNameContaining(String airline) {
         if (airline.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No Airline name received.");
         }
 
         List<TicketDTO> response = new ArrayList<>();
@@ -353,8 +352,8 @@ public class TicketService {
      * @throws NotFoundException if no tickets are found matching the criteria
      */
     public List<TicketDTO> findByAirplane(UUID airplaneID) {
-        if (airplaneID == null){
-            throw new MissingDataException();
+        if (airplaneID == null || airplaneID.toString().isEmpty()){
+            throw new MissingDataException("No Airplane ID received.");
         }
 
         List<TicketDTO> response = new ArrayList<>();
@@ -389,8 +388,8 @@ public class TicketService {
      * @throws NotFoundException if no tickets are found matching the criteria
      */
     public List<TicketDTO> findByOriginAirport(UUID id) {
-        if (id.toString().isEmpty() || id == null){
-            throw new MissingDataException();
+        if (id == null || id.toString().isEmpty()){
+            throw new MissingDataException("No Airport ID received.");
         }
 
         List<TicketDTO> response = new ArrayList<>();
@@ -425,8 +424,8 @@ public class TicketService {
      * @throws NotFoundException if no ticket is found matching the criteria
      */
     public TicketDTO findByAirplaneAndSeat(UUID airplaneId, int seat){
-        if (airplaneId == null || seat < 0){
-            throw new MissingDataException();
+        if (airplaneId == null || airplaneId.toString().isEmpty() || seat < 0){
+            throw new MissingDataException("Check Airplane ID or seat number.");
         }
         Ticket result = ticketServ.findByAirplaneIDAndSeat(airplaneId, seat).orElseThrow(NotFoundException::new);
 
@@ -451,8 +450,8 @@ public class TicketService {
      * @throws NotFoundException if no tickets are found matching the criteria
      */
     public List<TicketDTO> findByDestinyAirport(UUID id) {
-        if (id.toString().isEmpty() || id == null){
-            throw new MissingDataException();
+        if (id == null || id.toString().isEmpty()){
+            throw new MissingDataException("No Airport ID received.");
         }
 
         List<TicketDTO> response = new ArrayList<>();
@@ -488,8 +487,8 @@ public class TicketService {
      */
     @Transactional
     public TicketDTO update(TicketDTO dto, UUID id) {
-        if (id == null) {
-            throw new MissingDataException();
+        if (id == null || id.toString().isEmpty()) {
+            throw new MissingDataException("No ID received.");
         }
 
         Ticket ticket = this.findById(id);

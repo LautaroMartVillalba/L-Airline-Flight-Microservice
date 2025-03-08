@@ -24,26 +24,24 @@ public class AirportService {
 
     /**
      * Validates the provided AirportDTO object.
-     * Throws a RuntimeException if any of the required fields are invalid or empty.
+     * Throws a MissingDataException if any of the required fields are invalid or empty.
      *
      * @param dto the AirportDTO object to validate
-     * @return true if the validation is successful
-     * @throws RuntimeException if any validation check fails
+     * @throws MissingDataException if any validation check fails
      */
-    boolean validateAirport(AirportDTO dto){
+    void validateAirport(AirportDTO dto){
         if (dto.getName().isEmpty()){
-            throw new RuntimeException("Invalid name exception");
+            throw new MissingDataException("Invalid name exception");
         }
         if (dto.getLatitude().isEmpty()){
-            throw new RuntimeException("Invalid latitude exception");
+            throw new MissingDataException("Invalid latitude exception");
         }
         if (dto.getLongitude().isEmpty()){
-            throw new RuntimeException("Invalid longitude exception");
+            throw new MissingDataException("Invalid longitude exception");
         }
         if (dto.getCity().name().isEmpty()){
-            throw new RuntimeException("Invalid city exception");
+            throw new MissingDataException("Invalid city exception");
         }
-        return true;
     }
 
     /**
@@ -84,7 +82,7 @@ public class AirportService {
      */
     public Airport findById(UUID id){
         if (id == null){
-            throw new MissingDataException();
+            throw new MissingDataException("No ID received.");
         }
 
         return repository.findById(id).orElseThrow(NotFoundException::new);
@@ -100,7 +98,7 @@ public class AirportService {
      */
     public List<Airport> findByName(String name){
         if (name.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No name received.");
         }
 
         List<Airport> result = repository.findByNameContaining(name);
@@ -123,7 +121,7 @@ public class AirportService {
      */
     public Airport findByLatitudeAndLongitude(String latitude, String longitude){
         if (latitude.isEmpty() || longitude.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No ID received.");
         }
 
         return repository.findByLatitudeAndLongitude(latitude, longitude).orElseThrow(NotFoundException::new);
@@ -139,7 +137,7 @@ public class AirportService {
      */
     public List<Airport> findByCity(String city){
         if (city.isEmpty()){
-            throw new MissingDataException();
+            throw new MissingDataException("No ID received.");
         }
 
         List<Airport> result = repository.findByCityContaining(city);
@@ -188,7 +186,7 @@ public class AirportService {
     @Transactional
     public void deleteAirport(UUID id){
         if (id==null){
-            throw new MissingDataException();
+            throw new MissingDataException("No ID received.");
         }
         this.findById(id);
 

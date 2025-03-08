@@ -2,6 +2,8 @@ package ar.com.l_airline.services;
 
 import ar.com.l_airline.domain.airplane.Airplane;
 import ar.com.l_airline.domain.airplane.AirplaneDTO;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.InternalServiceException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import ar.com.l_airline.repositories.AirplaneRepository;
 import org.springframework.stereotype.Service;
@@ -28,23 +30,23 @@ public class AirplaneService {
      * Validates an airplane DTO before persisting.
      *
      * @param dto the AirplaneDTO to validate
-     * @throws RuntimeException if any validation condition fails
+     * @throws MissingDataException if any validation condition fails
      */
     public void validateAirplane(AirplaneDTO dto) {
         if (dto.getName().name().isEmpty()) {
-            throw new RuntimeException("Empty name exception");
+            throw new MissingDataException("Empty name exception");
         }
         if (dto.getAirlineName() == null) {
-            throw new RuntimeException("Empty AirlineName exception");
+            throw new MissingDataException("Empty AirlineName exception");
         }
         if (dto.getCapacity() < 70) {
-            throw new RuntimeException("Empty capacity exception");
+            throw new MissingDataException("Empty capacity exception");
         }
         if (dto.getTank() < 50000) {
-            throw new RuntimeException("Empty fuel tank exception");
+            throw new MissingDataException("Empty fuel tank exception");
         }
         if (dto.getMaxKmDistance() < 50) {
-            throw new RuntimeException("Empty max distance exception");
+            throw new MissingDataException("Empty max distance exception");
         }
     }
 
@@ -74,13 +76,13 @@ public class AirplaneService {
      *
      * @param id the UUID of the airplane
      * @return the found Airplane entity
-     * @throws RuntimeException if the ID is null or the airplane is not found
+     * @throws MissingDataException if the ID is null or the airplane is not found
      */
     public Airplane findById(UUID id) {
         if (id == null) {
-            throw new RuntimeException("Id not received");
+            throw new MissingDataException("Id not received");
         }
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Airplane not found"));
+        return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -88,12 +90,12 @@ public class AirplaneService {
      *
      * @param name the name to search for
      * @return a list of airplanes matching the name
-     * @throws RuntimeException if the name is empty
+     * @throws MissingDataException if the name is empty
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByName(String name) {
         if (name.isEmpty()) {
-            throw new RuntimeException("Empty name exception");
+            throw new MissingDataException("Empty name exception");
         }
         List<Airplane> result = repository.findByNameContaining(name);
 
@@ -107,12 +109,12 @@ public class AirplaneService {
      *
      * @param airline the airline name to search for
      * @return a list of airplanes matching the airline name
-     * @throws RuntimeException if the airline name is empty
+     * @throws MissingDataException if the airline name is empty
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByAirline(String airline) {
         if (airline.isEmpty()) {
-            throw new RuntimeException("Empty airline exception");
+            throw new MissingDataException("Empty airline exception");
         }
         List<Airplane> result = repository.findByAirlineNameContaining(airline);
 
@@ -127,12 +129,12 @@ public class AirplaneService {
      * @param min the minimum capacity
      * @param max the maximum capacity
      * @return a list of airplanes within the specified capacity range
-     * @throws RuntimeException if the values are out of range
+     * @throws MissingDataException if the values are out of range
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByCapacity(int min, int max) {
         if (min < 30 || max > 800) {
-            throw new RuntimeException("Check passengers number");
+            throw new MissingDataException("Check passengers number");
         }
 
         List<Airplane> result = repository.findByCapacityBetween(min, max);
@@ -148,12 +150,12 @@ public class AirplaneService {
      * @param min the minimum fuel capacity
      * @param max the maximum fuel capacity
      * @return a list of airplanes within the specified fuel range
-     * @throws RuntimeException if the values are out of range
+     * @throws MissingDataException if the values are out of range
      * @throws NotFoundException if no airplanes are found
      */
     public List<Airplane> findByFuel(int min, int max) {
         if (min < 50000 || max < 50000) {
-            throw new RuntimeException("Not enough fuel");
+            throw new MissingDataException("Not enough fuel");
         }
 
         List<Airplane> result = repository.findByTankBetween(min, max);
@@ -173,7 +175,7 @@ public class AirplaneService {
      */
     public List<Airplane> findByMaxDistance(int min, int max) {
         if (min < 50 || max > 10000) {
-            throw new RuntimeException("Check the distance");
+            throw new MissingDataException("Check the distance");
         }
 
         List<Airplane> result = repository.findByMaxKmDistanceBetween(min, max);
@@ -218,14 +220,14 @@ public class AirplaneService {
      * Deletes an airplane by ID.
      *
      * @param id the UUID of the airplane to delete
-     * @return true if deletion was successful
      */
     @Transactional
-    public boolean deleteAirplane(UUID id){
+    public void deleteAirplane(UUID id){
         Airplane result = this.findById(id);
-
-        repository.deleteById(result.getId());
-
-        return true;
+        try {
+            repository.deleteById(result.getId());
+        }catch (Exception e){
+            throw new InternalServiceException();
+        }
     }
 }
