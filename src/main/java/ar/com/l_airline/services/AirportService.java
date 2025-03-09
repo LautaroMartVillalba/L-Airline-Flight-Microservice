@@ -85,7 +85,7 @@ public class AirportService {
             throw new MissingDataException("No ID received.");
         }
 
-        return repository.findById(id).orElseThrow(NotFoundException::new);
+        return repository.findByID(id).orElseThrow(NotFoundException::new);
     }
 
     /**

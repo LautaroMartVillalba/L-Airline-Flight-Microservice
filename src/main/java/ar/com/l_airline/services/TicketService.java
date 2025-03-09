@@ -141,7 +141,7 @@ public class TicketService {
             throw new MissingDataException("Empty ID.");
         }
 
-        Ticket result = ticketServ.findById(id).orElseThrow(NotFoundException::new);
+        Ticket result = ticketServ.findByID(id).orElseThrow(NotFoundException::new);
         return TicketDTO.builder()
                 .airlineName(result.getAirlineName())
                 .origin(result.getOrigin())

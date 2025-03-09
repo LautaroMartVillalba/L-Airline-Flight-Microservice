@@ -82,7 +82,7 @@ public class AirplaneService {
         if (id == null) {
             throw new MissingDataException("Id not received");
         }
-        return repository.findById(id).orElseThrow(NotFoundException::new);
+        return repository.findByID(id).orElseThrow(NotFoundException::new);
     }
 
     /**
