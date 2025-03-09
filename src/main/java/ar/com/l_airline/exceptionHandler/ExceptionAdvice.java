@@ -1,6 +1,7 @@
 package ar.com.l_airline.exceptionHandler;
 
 import ar.com.l_airline.exceptionHandler.custom_exceptions.ExistingObjectException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.InternalServiceException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import org.springframework.http.HttpStatusCode;
@@ -50,7 +51,7 @@ public class ExceptionAdvice {
      *  Return a 400 code if an unknowned error has occurred during server communication.
      * @return 400, "An error has occurred. Tru again or contact the service developers".
      */
-    @ExceptionHandler(value = NotFoundException.class)
+    @ExceptionHandler(value = InternalServiceException.class)
     public ResponseEntity<ExceptionDTO> internalServiceExcHandler() {
         ExceptionDTO dto = ExceptionDTO.builder().message("An error has occurred. Tru again or contact the service developers.")
                 .code(HttpStatusCode.valueOf(400)).build();
