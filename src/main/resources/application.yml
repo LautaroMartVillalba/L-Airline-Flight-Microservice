@@ -32,3 +32,18 @@ eureka:
     instance-id: microservice-flight
   client:
     fetch-registry: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      flightBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 5
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 5s
