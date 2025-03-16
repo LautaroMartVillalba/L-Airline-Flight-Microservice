@@ -47,3 +47,24 @@ resilience4j:
         eventConsumerBufferSize: 10
         slowCallRateThreshold: 50
         slowCallDurationThreshold: 5s
+
+resilience4j.ratelimiter:
+  instances:
+    post-delete-patch:
+      limitForPeriod: 5
+      limitRefreshPeriod: 1s
+      timeoutDuration: 500
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 50
+    gets:
+      limitForPeriod: 2000
+      limitRefreshPeriod: 1s
+      timeoutDuration: 500
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100
+    ticket-create:
+      limitForPeriod: 30
+      limitRefreshPeriod: 1s
+      timeoutDuration: 500
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100

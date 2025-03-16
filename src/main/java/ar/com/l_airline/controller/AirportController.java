@@ -8,6 +8,7 @@ import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
 import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
 import ar.com.l_airline.services.AirportService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,42 +29,49 @@ public class AirportController {
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="post-delete-patch")
     @PostMapping("/create")
     public ResponseEntity<Airport> createAirport(@RequestBody AirportDTO dto){
         return ResponseEntity.ok(service.createAirport(dto));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="get")
     @GetMapping("/byId")
     public ResponseEntity<Airport> findById(@RequestParam UUID id){
         return ResponseEntity.ok(service.findById(id));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="get")
     @GetMapping("/byCoordinates")
     public ResponseEntity<Airport> findByCoordinates(@RequestParam String latitude, @RequestParam String longitude){
         return ResponseEntity.ok(service.findByLatitudeAndLongitude(latitude, longitude));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="get")
     @GetMapping("/byName")
     public ResponseEntity<List<Airport>> findByName(@RequestParam String name){
         return ResponseEntity.ok(service.findByName(name));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="get")
     @GetMapping("/byCity")
     public ResponseEntity<List<Airport>> findByCity(@RequestParam String city){
         return ResponseEntity.ok(service.findByCity(city));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="post-delete-patch")
     @PatchMapping("/update")
     public ResponseEntity<Airport> update(@RequestBody AirportDTO dto, @RequestParam UUID id){
         return ResponseEntity.ok(service.updateAirport(dto, id));
     }
 
     @CircuitBreaker(name = "flightBreaker", fallbackMethod = "fallback")
+    @RateLimiter(name ="post-delete-patch")
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam UUID id){
         service.deleteAirport(id);
