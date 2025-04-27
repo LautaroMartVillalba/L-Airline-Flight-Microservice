@@ -12,8 +12,8 @@ import java.util.UUID;
 @Repository
 public interface AirportRepository extends Neo4jRepository<Airport, UUID> {
 
-    @Query("MATCH (a:Airport {id: $id}) RETURN a")
-    Optional<Airport> findByID(UUID id);
+    @Query("MATCH (a:Airport {code: $code}) RETURN a")
+    Optional<Airport> findByID(UUID code);
     @Query("MATCH (a: Airport) WHERE a.name CONTAINS $name RETURN a")
     List<Airport> findByNameContaining(String name);
     @Query("MATCH (a: Airport) WHERE a.latitude=$latitude AND a.longitude=$longitude RETURN a")
