@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class TicketDTO {
-    private UUID id;
+    private UUID code;
     private City origin;
     private City destiny;
     private double price;

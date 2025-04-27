@@ -23,7 +23,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(GeneratedValue.UUIDGenerator.class)
-    private UUID id;
+    private UUID code;
     private City origin;
     private City destiny;
     private int seat;

@@ -15,8 +15,8 @@ import java.util.UUID;
 @EnableNeo4jRepositories
 public interface TicketRepository extends Neo4jRepository<Ticket, UUID> {
 
-    @Query("MATCH (a:flight_ticket) WHERE a.id CONTAINS id RETURN a")
-    Optional<Ticket> findByID(UUID id);
+    @Query("MATCH (a:flight_ticket) WHERE a.code = $code RETURN a")
+    Optional<Ticket> findByID(UUID code);
     @Query("MATCH (a:flight_ticket) WHERE a.origin CONTAINS $city RETURN a")
     List<Ticket> findByOriginContaining(String city);
     @Query("MATCH (a:flight_ticket) WHERE a.destiny CONTAINS $city RETURN a")
