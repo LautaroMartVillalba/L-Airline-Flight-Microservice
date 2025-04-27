@@ -12,8 +12,8 @@ import java.util.UUID;
 @Repository
 public interface AirplaneRepository extends Neo4jRepository<Airplane, UUID> {
 
-    @Query("MATCH (a:Airplane {id: $id}) RETURN a")
-    Optional<Airplane> findByID(UUID id);
+    @Query("MATCH (a:Airplane {code: $code}) RETURN a")
+    Optional<Airplane> findByID(UUID code);
     @Query("MATCH (a:Airplane) WHERE a.name CONTAINS $name RETURN a")
     List<Airplane> findByNameContaining(String name);
     @Query("MATCH (a:Airplane) WHERE a.airlineName CONTAINS $airline RETURN a")

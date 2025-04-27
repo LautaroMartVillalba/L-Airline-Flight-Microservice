@@ -1,5 +1,34 @@
 package ar.com.l_airline.domain.airplane;
 
 public enum AirplaneName {
-    ExampleOne
+    BOEING_747,
+    AIRBUS_A380,
+    BOEING_787,
+    AIRBUS_A320,
+    BOEING_737,
+    AIRBUS_A350,
+    BOEING_777,
+    AIRBUS_A330,
+    BOEING_767,
+    AIRBUS_A340,
+    BOEING_757,
+    AIRBUS_A310,
+    BOEING_727,
+    AIRBUS_A300,
+    BOEING_717,
+    EMBRAER_E195,
+    BOMBARDIER_CRJ900,
+    EMBRAER_E175,
+    BOMBARDIER_CRJ700,
+    EMBRAER_E190,
+    BOMBARDIER_CRJ1000,
+    EMBRAER_E170,
+    BOMBARDIER_Q400,
+    ATR_72,
+    ATR_42,
+    CESSNA_172,
+    CESSNA_182,
+    CESSNA_208,
+    PIPER_PA28,
+    PIPER_PA34
 }
