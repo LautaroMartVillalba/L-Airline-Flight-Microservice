@@ -30,6 +30,34 @@ public class TicketService {
         this.airplaneServ = airplaneServ;
     }
 
+    private TicketRetrieveDTO convert(Ticket ticket, Airplane airplane, Airport origin, Airport destiny){
+        return TicketRetrieveDTO.builder()
+                .code(ticket.getCode())
+                .airlineName(airplane.getAirlineName())
+                .origin(origin.getCity())
+                .destiny(destiny.getCity())
+                .seat(ticket.getSeat())
+                .price(ticket.getPrice())
+                .schedule(ticket.getSchedule())
+                .airplaneID(ticket.getAirplaneID())
+                .originAirportID(ticket.getOriginAirportID())
+                .destinyAirportID(ticket.getDestinyAirportID()).build();
+    }
+
+    private TicketRetrieveDTO convert(Ticket ticket){
+        return TicketRetrieveDTO.builder()
+                .code(ticket.getCode())
+                .airlineName(ticket.getAirlineName())
+                .origin(ticket.getOrigin())
+                .destiny(ticket.getDestiny())
+                .seat(ticket.getSeat())
+                .price(ticket.getPrice())
+                .schedule(ticket.getSchedule())
+                .airplaneID(ticket.getAirplaneID())
+                .originAirportID(ticket.getOriginAirportID())
+                .destinyAirportID(ticket.getDestinyAirportID()).build();
+    }
+
     /**
      * Validates the ticket details.
      *
@@ -80,6 +108,7 @@ public class TicketService {
 
         Ticket ticket  = Ticket.builder()
                 .airplane(airplane)
+                .airlineName(airplane.getAirlineName())
                 .origin(origin.getCity())
                 .originAirport(origin)
                 .originAirportID(UUID.fromString(String.valueOf(dto.getOriginAirportID())))
@@ -94,17 +123,7 @@ public class TicketService {
 
         ticketServ.save(ticket);
 
-        return TicketRetrieveDTO.builder()
-                .code(ticket.getCode())
-                .airlineName(airplane.getAirlineName())
-                .origin(origin.getCity())
-                .destiny(destiny.getCity())
-                .seat(dto.getSeat())
-                .price(ticketPrice)
-                .schedule(dto.getSchedule())
-                .airplaneID(dto.getAirplaneID())
-                .originAirportID(dto.getOriginAirportID())
-                .destinyAirportID(dto.getDestinyAirportID()).build();
+        return convert(ticket, airplane, origin, destiny);
     }
 
     /**
@@ -137,16 +156,8 @@ public class TicketService {
         }
 
         Ticket result = ticketServ.findByID(id).orElseThrow(NotFoundException::new);
-        return TicketRetrieveDTO.builder()
-                .airlineName(result.getAirlineName())
-                .origin(result.getOrigin())
-                .destiny(result.getDestiny())
-                .seat(result.getSeat())
-                .price(result.getPrice())
-                .schedule(result.getSchedule())
-                .airplaneID(result.getAirplaneID())
-                .originAirportID(result.getOriginAirportID())
-                .destinyAirportID(result.getDestinyAirportID()).build();
+
+        return convert(result);
     }
 
     /**
@@ -169,16 +180,7 @@ public class TicketService {
         }
 
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -206,16 +208,7 @@ public class TicketService {
         }
 
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -239,16 +232,7 @@ public class TicketService {
         List<Ticket> result = ticketServ.findByPriceBetween(min, max);
 
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -282,16 +266,7 @@ public class TicketService {
             throw new NotFoundException();
         }
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -318,16 +293,7 @@ public class TicketService {
             throw new NotFoundException();
         }
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -354,16 +320,7 @@ public class TicketService {
             throw new NotFoundException();
         }
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -390,16 +347,7 @@ public class TicketService {
             throw new NotFoundException();
         }
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -420,16 +368,7 @@ public class TicketService {
         }
         Ticket result = ticketServ.findByAirplaneIDAndSeat(airplaneId, seat).orElseThrow(NotFoundException::new);
 
-        return TicketRetrieveDTO.builder()
-                .airlineName(result.getAirlineName())
-                .origin(result.getOrigin())
-                .destiny(result.getDestiny())
-                .seat(result.getSeat())
-                .price(result.getPrice())
-                .schedule(result.getSchedule())
-                .airplaneID(result.getAirplaneID())
-                .originAirportID(result.getOriginAirportID())
-                .destinyAirportID(result.getDestinyAirportID()).build();
+        return convert(result);
     }
 
     /**
@@ -452,16 +391,7 @@ public class TicketService {
             throw new NotFoundException();
         }
         result.forEach(ticket -> {
-            TicketRetrieveDTO dto = TicketRetrieveDTO.builder()
-                    .airlineName(ticket.getAirlineName())
-                    .origin(ticket.getOrigin())
-                    .destiny(ticket.getDestiny())
-                    .seat(ticket.getSeat())
-                    .price(ticket.getPrice())
-                    .schedule(ticket.getSchedule())
-                    .airplaneID(ticket.getAirplaneID())
-                    .originAirportID(ticket.getOriginAirportID())
-                    .destinyAirportID(ticket.getDestinyAirportID()).build();
+            TicketRetrieveDTO dto = convert(ticket);
 
             response.add(dto);
         });
@@ -519,17 +449,7 @@ public class TicketService {
         }
         ticketServ.save(ticket);
 
-        return TicketRetrieveDTO.builder()
-                .code(ticket.getCode())
-                .airlineName(ticket.getAirlineName())
-                .origin(ticket.getOrigin())
-                .destiny(ticket.getDestiny())
-                .seat(ticket.getSeat())
-                .price(ticket.getPrice())
-                .schedule(ticket.getSchedule())
-                .airplaneID(ticket.getAirplaneID())
-                .originAirportID(ticket.getOriginAirportID())
-                .destinyAirportID(ticket.getDestinyAirportID()).build();
+        return convert(ticket);
     }
 
     /**
