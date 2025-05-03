@@ -60,8 +60,8 @@ public class ExceptionAdvice {
      * @return 406 HTTP code.
      */
     @ExceptionHandler(value = InvalidFormatException.class)
-    public ResponseEntity<ExceptionDTO> InvalidFormatExcHandler() {
-        ExceptionDTO dto = ExceptionDTO.builder().code(HttpStatusCode.valueOf(406)).build();
+    public ResponseEntity<ExceptionDTO> InvalidFormatExcHandler(InvalidFormatException exc) {
+        ExceptionDTO dto = ExceptionDTO.builder().message(exc.getMessage()).code(HttpStatusCode.valueOf(406)).build();
 
         return new ResponseEntity<>(dto, dto.getCode());
     }

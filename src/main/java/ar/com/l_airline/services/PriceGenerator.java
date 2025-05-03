@@ -8,7 +8,7 @@ public class PriceGenerator {
 
     /**
      * Calculates the flight price based on the geographical coordinates of the origin and destination.
-     * The coordinates are expected to be in a specific format (e.g., "DDDMMSSX" where DDD is degrees,
+     * The coordinates are expected to be in a specific format (e.g., "DDD°MM'SS''X" where DDD is degrees,
      * MM is minutes, SS is seconds, and X is the direction (N, S, E, O)).
      *
      * @param originLatitude the latitude of the origin airport in the format "DDDMMSSX"
@@ -46,36 +46,42 @@ public class PriceGenerator {
     }
 
     private static boolean validateFormat(String coordinate){
-        if (coordinate == null || coordinate.length() != 8){
+        if (coordinate == null || coordinate.length() != 12){
             return false;
         }
 
-        for (int i = 0; i < 7; i ++){
-            if (!Character.isDigit(coordinate.charAt(i))){
-                return false;
+        for (int i = 0; i < 12; i ++){
+            if (i == 1 || i == 2 || i == 3){
+                if (!Character.isDigit(coordinate.charAt(i-1))){
+                    return false;
+                }
+            }
+            if (i == 4 || i == 5){
+                if (!Character.isDigit(coordinate.charAt(i))){
+                    return false;
+                }
+            }
+            if (i == 7 || i == 8){
+                if (!Character.isDigit(coordinate.charAt(i))){
+                    return false;
+                }
             }
         }
 
-        char direction = coordinate.charAt(7);
-        if (direction != 'N' && direction != 'S' && direction != 'E' && direction != 'O') {
-            return false;
-        }
-
-        return true;
+        return coordinate.endsWith("N") || coordinate.endsWith("O") || coordinate.endsWith("S") || coordinate.endsWith("E");
     }
 
     private static double convertCoordinateToRadiansInDouble(String coordinate){
 
         if (!validateFormat(coordinate)){
-            throw new InvalidFormatException("The received coordinate is not matching with the expect format." +
-                    " Please, follow the DDDMMSSX format, where DDD is degrees, MM es minutes, SS is seconds" +
-                    " and X is orientation.");
+            throw new InvalidFormatException("The received coordinate is not matching with the expected format." +
+                    " Please, follow the DDD°MM'SS''X format, where DDD is degrees, MM es minutes, SS is seconds" +
+                    " and X is an orientation.");
         }
 
         int degrees = Integer.parseInt(coordinate.substring(0, 3));
-        int minutes = Integer.parseInt(coordinate.substring(3, 5));
-        int seconds = Integer.parseInt(coordinate.substring(5, 7));
-
+        int minutes = Integer.parseInt(coordinate.substring(4, 6));
+        int seconds = Integer.parseInt(coordinate.substring(7, 9));
         double toDecimal = degrees + minutes / 60.0 + seconds / 3600.0;
 
         char direction = coordinate.charAt(coordinate.length() -1);
@@ -84,7 +90,6 @@ public class PriceGenerator {
         }
 
         toDecimal = Math.toRadians(toDecimal);
-
         return  toDecimal;
     }
 
