@@ -1,9 +1,6 @@
 package ar.com.l_airline.exceptionHandler;
 
-import ar.com.l_airline.exceptionHandler.custom_exceptions.ExistingObjectException;
-import ar.com.l_airline.exceptionHandler.custom_exceptions.InternalServiceException;
-import ar.com.l_airline.exceptionHandler.custom_exceptions.MissingDataException;
-import ar.com.l_airline.exceptionHandler.custom_exceptions.NotFoundException;
+import ar.com.l_airline.exceptionHandler.custom_exceptions.*;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,5 +53,16 @@ public class ExceptionAdvice {
         ExceptionDTO dto = ExceptionDTO.builder().message("An error has occurred. Tru again or contact the service developers.")
                 .code(HttpStatusCode.valueOf(400)).build();
         return new ResponseEntity<>(dto,dto.getCode());
+    }
+
+    /**
+     *  Return a 406 code if the received format doesn't match with the expected format.
+     * @return 406 HTTP code.
+     */
+    @ExceptionHandler(value = InvalidFormatException.class)
+    public ResponseEntity<ExceptionDTO> InvalidFormatExcHandler() {
+        ExceptionDTO dto = ExceptionDTO.builder().code(HttpStatusCode.valueOf(406)).build();
+
+        return new ResponseEntity<>(dto, dto.getCode());
     }
 }
