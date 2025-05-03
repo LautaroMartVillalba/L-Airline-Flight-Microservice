@@ -56,26 +56,27 @@ public class PriceGenerator {
             }
         }
 
-        if (!coordinate.endsWith("S") || !coordinate.endsWith("N") || !coordinate.endsWith("E")|| !coordinate.endsWith("O")){
+        char direction = coordinate.charAt(7);
+        if (direction != 'N' && direction != 'S' && direction != 'E' && direction != 'O') {
             return false;
         }
-        
+
         return true;
     }
 
     private static double convertCoordinateToRadiansInDouble(String coordinate){
 
-        if (validateFormat(coordinate)){
+        if (!validateFormat(coordinate)){
             throw new InvalidFormatException("The received coordinate is not matching with the expect format." +
                     " Please, follow the DDDMMSSX format, where DDD is degrees, MM es minutes, SS is seconds" +
                     " and X is orientation.");
         }
 
-        double degrees = Integer.parseInt(coordinate.substring(0,3));
-        double minutes = Integer.parseInt(coordinate.substring(4,6));
-        double seconds = Integer.parseInt(coordinate.substring(7,8));
+        int degrees = Integer.parseInt(coordinate.substring(0, 3));
+        int minutes = Integer.parseInt(coordinate.substring(3, 5));
+        int seconds = Integer.parseInt(coordinate.substring(5, 7));
 
-        double toDecimal = degrees + minutes / 60 + seconds / 3600;
+        double toDecimal = degrees + minutes / 60.0 + seconds / 3600.0;
 
         char direction = coordinate.charAt(coordinate.length() -1);
         if (direction == 'S' || direction == 'O'){
