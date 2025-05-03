@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class AirplaneDTO {
-    private UUID id;
+    private UUID code;
     private AirplaneName name;
     private AirlineName airlineName;
     private int capacity;

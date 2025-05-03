@@ -20,7 +20,7 @@ public class Airplane {
 
     @Id
     @GeneratedValue(GeneratedValue.UUIDGenerator.class)
-    private UUID id;
+    private UUID code;
     private AirplaneName name;
     private AirlineName airlineName;
     private int capacity;

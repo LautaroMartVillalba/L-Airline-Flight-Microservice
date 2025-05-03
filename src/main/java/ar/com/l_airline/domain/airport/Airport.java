@@ -20,7 +20,7 @@ public class Airport {
 
     @Id
     @GeneratedValue(GeneratedValue.UUIDGenerator.class)
-    private UUID id;
+    private UUID code;
     private String name;
     private String latitude;
     private String longitude;

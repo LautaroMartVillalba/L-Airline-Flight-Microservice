@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class AirportDTO {
-    private UUID id;
+    private UUID code;
     private String name;
     private String latitude;
     private String longitude;

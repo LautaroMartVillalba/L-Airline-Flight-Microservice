@@ -82,7 +82,7 @@ public class AirplaneService {
         if (id == null) {
             throw new MissingDataException("Id not received");
         }
-        return repository.findByID(id).orElseThrow(NotFoundException::new);
+        return repository.findByID(id.toString()).orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -225,7 +225,7 @@ public class AirplaneService {
     public void deleteAirplane(UUID id){
         Airplane result = this.findById(id);
         try {
-            repository.deleteById(result.getId());
+            repository.deleteById(result.getCode());
         }catch (Exception e){
             throw new InternalServiceException();
         }
