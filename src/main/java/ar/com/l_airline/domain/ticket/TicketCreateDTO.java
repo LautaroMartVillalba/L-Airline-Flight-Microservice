@@ -14,7 +14,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class TicketCreateDTO {
-    private UUID code;
     private int seat;
     private LocalDateTime schedule;
     private UUID airplaneID;

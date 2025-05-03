@@ -82,7 +82,7 @@ public class TicketService {
                 .airplane(airplane)
                 .origin(origin.getCity())
                 .originAirport(origin)
-                .originAirportID(dto.getOriginAirportID())
+                .originAirportID(UUID.fromString(String.valueOf(dto.getOriginAirportID())))
                 .destiny(destiny.getCity())
                 .destinyAirport(destiny)
                 .destinyAirportID(dto.getDestinyAirportID())
@@ -95,6 +95,7 @@ public class TicketService {
         ticketServ.save(ticket);
 
         return TicketRetrieveDTO.builder()
+                .code(ticket.getCode())
                 .airlineName(airplane.getAirlineName())
                 .origin(origin.getCity())
                 .destiny(destiny.getCity())
