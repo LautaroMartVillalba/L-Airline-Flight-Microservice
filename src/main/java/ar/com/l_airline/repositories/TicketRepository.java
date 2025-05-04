@@ -35,4 +35,6 @@ public interface TicketRepository extends Neo4jRepository<Ticket, UUID> {
     List<Ticket> findByDestinyAirportID(UUID airportID);
     @Query("MATCH (a:flight_ticket) WHERE a.airplaneID=$airplaneID AND a.seat=$seat RETURN a")
     Optional<Ticket> findByAirplaneIDAndSeat(UUID airplaneID, int seat);
+    @Query("MATCH (a:flight_ticket) WHERE a.airplaneID=$airplaneID AND a.seat=$seat AND a.schedule=schedule RETURN a")
+    Optional<Ticket> findExistingTicket(UUID airplaneID, int seat, LocalDateTime schedule);
 }
